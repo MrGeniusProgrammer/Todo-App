@@ -28,6 +28,7 @@ function Page() {
 
     async function handleSubmit(values: RegisterUserInput) {
         setIsLoading(true)
+
         const res = await fetch(`/api/auth/${pathname}`, {
             method: "POST",
             headers: {
@@ -40,6 +41,7 @@ function Page() {
 
         if (!res.ok) {
             const errors: typeToFlattenedError<any, string> = resData.errors
+            setIsLoading(false)
             return setFormErrors(errors, form)
         }
 
