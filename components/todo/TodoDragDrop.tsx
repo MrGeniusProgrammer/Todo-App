@@ -5,7 +5,7 @@ import { cn } from "@/lib/clientUtils";
 import { TodoItemType, TodoListType } from "@/lib/validations/todo.schema";
 import { useContext } from "react";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
-import TodoCardDroppable from "./TodoCardDroppable";
+import TodoCard from "./TodoCard";
 
 export default function TodoDragDrop() {
     const { todoLists, setTodoLists } = useContext(TodoContext);
@@ -62,11 +62,11 @@ export default function TodoDragDrop() {
                                         {...provided.dragHandleProps}
                                         style={{ ...provided.draggableProps.style }}
                                         className={cn(
-                                            "mx-3 h-fit relative min-w-[300px] max-w-[400px]",
+                                            "mx-3 h-fit relative min-w-[300px] max-w-[400px] flex flex-col space-y-2 shadow-lg border-2 bg-primary-foreground border-border rounded-lg",
                                             !todoList.isSearched && "opacity-0 pointer-events-none h-0 w-0 absolute"
                                         )}
                                     >
-                                        <TodoCardDroppable todoList={todoList} todoListIndex={index} />
+                                        <TodoCard todoList={todoList} todoListIndex={index} />
                                     </div>
                                 )}
                             </Draggable>

@@ -11,7 +11,7 @@ import Button from "../ui/Button";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/Dropdown-Menu";
 import { Input } from "../ui/Input";
 import { Textarea } from "../ui/Textarea";
-import TodoItemContainer from "./TodoItemContainer";
+import TodoItem from "./TodoItem";
 
 interface TodoCardDroppableProps {
     todoList: TodoListType
@@ -118,101 +118,99 @@ export default function TodoCardDroppable({ todoList, todoListIndex }: TodoCardD
     }
 
     return (
-        <Droppable droppableId={todoList.id} type="CARD">
-            {(provided, snapshot) => (
-                <div
-                    className="flex flex-col space-y-2 shadow-lg border-2 bg-primary-foreground border-border rounded-lg h-full"
-                >
-                    <header className="font-medium flex flex-col justify-center space-y-2 cursor-pointer text-xl w-full px-4 pt-4">
-                        <div className="flex justify-between items-center flex-1">
-                            {isTextarea ?
-                                <Textarea
-                                    onKeyDown={handleEdit}
-                                    defaultValue={todoList.header}
-                                    autoFocus={isTextarea}
-                                    onBlur={() => setIsTextarea(false)}
-                                    className="text-xl"
-                                />
-                                :
-                                <h1 className="grow cursor-pointer"> {todoList.header} </h1>
-                            }
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="secondary" size="sm" className="w-9 h-9 p-2.5 ml-3 rounded-full object-cover">
-                                        <MoreVertical />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="p-1">
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem
-                                            onClick={() => setIsTextarea(true)}
-                                            className="cursor-pointer pl-1"
-                                        >
-                                            <Edit2 className="w-4 h-4 mx-1" />
-                                            <span className="pl-1">Edit</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={handleDeleteTodoList}
-                                            className="cursor-pointer pl-1"
-                                        >
-                                            <Trash className="w-4 h-4 mx-1" />
-                                            <span className="pl-1">Delete</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => setIsInput(true)}
-                                            className="cursor-pointer pl-1"
-                                        >
-                                            <Search className="w-4 h-4 mx-1" />
-                                            <span className="pl-1">Search</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSub>
-                                        <DropdownMenuSubTrigger>
-                                            <SlidersHorizontal className="w-4 h-4 mr-1" />
-                                            <span className="pl-1">Filter By</span>
-                                        </DropdownMenuSubTrigger>
-                                        <DropdownMenuSubContent>
-                                            <DropdownMenuCheckboxItem
-                                                checked={todoList.filterByChecked}
-                                                onCheckedChange={() => handleFilter(true)}
-                                                className="cursor-pointer"
-                                            >
-                                                Checked
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem
-                                                checked={todoList.filterByNotChecked}
-                                                onCheckedChange={() => handleFilter(false)}
-                                                className="cursor-pointer"
-                                            >
-                                                Not Checked
-                                            </DropdownMenuCheckboxItem>
-                                            <DropdownMenuCheckboxItem
-                                                checked={todoList.filterByChecked === todoList.filterByNotChecked}
-                                                onCheckedChange={() => handleFilter(undefined, true)}
-                                                className="cursor-pointer"
-                                            >
-                                                All
-                                            </DropdownMenuCheckboxItem>
-                                        </DropdownMenuSubContent>
-                                    </DropdownMenuSub>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-                        <Input
-                            type="text"
-                            ref={ref}
-                            autoFocus={isInput}
-                            onKeyDown={(event) => { if (event.key === "Escape") { handleSearch(""); setIsInput(false); event.currentTarget.value = ""; } }}
-                            onBlur={(event) => { handleSearch(""); setIsInput(false); event.currentTarget.value = ""; }}
-                            onChange={(event) => handleSearch(event.currentTarget.value)}
-                            placeholder="Search Todo Items"
-                            className={cn(
-                                "w-full",
-                                !isInput && "hidden"
-                            )}
+        <>
+            <header className="font-medium flex flex-col justify-center space-y-2 cursor-pointer text-xl w-full px-4 pt-4">
+                <div className="flex justify-between items-center flex-1">
+                    {isTextarea ?
+                        <Textarea
+                            onKeyDown={handleEdit}
+                            defaultValue={todoList.header}
+                            autoFocus={isTextarea}
+                            onBlur={() => setIsTextarea(false)}
+                            className="text-xl"
                         />
-                    </header>
+                        :
+                        <h1 className="grow cursor-pointer"> {todoList.header} </h1>
+                    }
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="secondary" size="sm" className="w-9 h-9 p-2.5 ml-3 rounded-full object-cover">
+                                <MoreVertical />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="p-1">
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem
+                                    onClick={() => setIsTextarea(true)}
+                                    className="cursor-pointer pl-1"
+                                >
+                                    <Edit2 className="w-4 h-4 mx-1" />
+                                    <span className="pl-1">Edit</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={handleDeleteTodoList}
+                                    className="cursor-pointer pl-1"
+                                >
+                                    <Trash className="w-4 h-4 mx-1" />
+                                    <span className="pl-1">Delete</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => setIsInput(true)}
+                                    className="cursor-pointer pl-1"
+                                >
+                                    <Search className="w-4 h-4 mx-1" />
+                                    <span className="pl-1">Search</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                            </DropdownMenuGroup>
+                            <DropdownMenuSub>
+                                <DropdownMenuSubTrigger>
+                                    <SlidersHorizontal className="w-4 h-4 mr-1" />
+                                    <span className="pl-1">Filter By</span>
+                                </DropdownMenuSubTrigger>
+                                <DropdownMenuSubContent>
+                                    <DropdownMenuCheckboxItem
+                                        checked={todoList.filterByChecked}
+                                        onCheckedChange={() => handleFilter(true)}
+                                        className="cursor-pointer"
+                                    >
+                                        Checked
+                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={todoList.filterByNotChecked}
+                                        onCheckedChange={() => handleFilter(false)}
+                                        className="cursor-pointer"
+                                    >
+                                        Not Checked
+                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={todoList.filterByChecked === todoList.filterByNotChecked}
+                                        onCheckedChange={() => handleFilter(undefined, true)}
+                                        className="cursor-pointer"
+                                    >
+                                        All
+                                    </DropdownMenuCheckboxItem>
+                                </DropdownMenuSubContent>
+                            </DropdownMenuSub>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+                <Input
+                    type="text"
+                    ref={ref}
+                    autoFocus={isInput}
+                    onKeyDown={(event) => { if (event.key === "Escape") { handleSearch(""); setIsInput(false); event.currentTarget.value = ""; } }}
+                    onBlur={(event) => { handleSearch(""); setIsInput(false); event.currentTarget.value = ""; }}
+                    onChange={(event) => handleSearch(event.currentTarget.value)}
+                    placeholder="Search Todo Items"
+                    className={cn(
+                        "w-full",
+                        !isInput && "hidden"
+                    )}
+                />
+            </header>
+            <Droppable droppableId={todoList.id} type="CARD">
+                {(provided, snapshot) => (
                     <main
                         ref={provided.innerRef}
                         {...provided.droppableProps}
@@ -233,7 +231,7 @@ export default function TodoCardDroppable({ todoList, todoListIndex }: TodoCardD
                                             !todoItem.isSearched && "opacity-0 pointer-events-none h-0 w-0 absolute"
                                         )}
                                     >
-                                        <TodoItemContainer
+                                        <TodoItem
                                             todoItem={todoItem}
                                             todoItemIndex={index}
                                             todoList={todoList}
@@ -253,15 +251,15 @@ export default function TodoCardDroppable({ todoList, todoListIndex }: TodoCardD
                         ))}
                         {provided.placeholder}
                     </main>
-                    <footer className="w-full p-4 border-t-2 border-border">
-                        <Input
-                            type="text"
-                            onKeyDown={handleCreate}
-                            placeholder="Create a Todo"
-                        />
-                    </footer>
-                </div>
-            )}
-        </Droppable>
+                )}
+            </Droppable>
+            <footer className="w-full p-4 border-t-2 border-border">
+                <Input
+                    type="text"
+                    onKeyDown={handleCreate}
+                    placeholder="Create a Todo"
+                />
+            </footer>
+        </>
     )
 }
