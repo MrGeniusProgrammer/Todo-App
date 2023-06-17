@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model TodoItems {
+  id          String     @id @default(uuid())
+  content     String
+  checked     Boolean
+  index       Int        @default(0)
+  TodoLists   TodoLists? @relation(fields: [todoListsId], references: [id])
+  todoListsId String?
+}
+
+model TodoLists {
+  id                 String      @id @default(uuid())
+  header             String
+  filterByChecked    Boolean     @default(false)
+  filterByNotChecked Boolean     @default(false)
+  index              Int         @default(0)
+  todoItems          TodoItems[]
+  Users              Users?      @relation(fields: [usersId], references: [id])
+  usersId            String?
+}
+
+model Users {
+  id        String      @id @default(uuid())
+  username  String      @unique
+  email     String      @unique
+  password  String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  todoLists TodoLists[]
+}
